@@ -21,22 +21,32 @@ pwmr.start(0)
 pwmy.start(0)
 pwmb.start(0)
 
-while True:
-  with open("Lab4.txt", 'r') as f:
-    data = json.load(f)
+try: 
+  while True:
+    with open("Lab4.txt", 'r') as f:
+      data = json.load(f)
     dutycycle = float(data['ledvalue'])
     if data['option'] == "red":
+      pwmr.start(0)
       pwmr.ChangeDutyCycle(dutycycle)
       pwmy.stop()
       pwmb.stop()
     elif data['option'] == "yellow":
+      pwmy.start(0)
       pwmy.ChangeDutyCycle(dutycycle)
       pwmr.stop()
       pwmb.stop()
     else:
+      pwmb.start(0)
       pwmb.ChangeDutyCycle(dutycycle)
       pwmr.stop()
       pwmy.stop()      
     time.sleep(0.1)
+except KeyboardInterrupt:
+  pwmr.stop()
+  pwmy.stop()
+  pwmb.stop()
+  GPIO.cleanup()
+
 
 
